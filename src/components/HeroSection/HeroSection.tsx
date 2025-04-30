@@ -22,7 +22,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({
   return (
     <section className="max-w-7xl mx-auto text-white mt-16 lg:py-0 sm:mt-5 flex flex-col md:flex-row items-center justify-between px-4 lg:px-0">
       {/* Contenido del lado izquierdo */}
-      <div className="relative md:absolute z-10 flex flex-col text-center md:text-left w-full md:w-3/4 lg:w-1/2 ml-20">
+      <div className="relative md:absolute z-10 flex flex-col text-center md:text-left w-full md:w-3/4 lg:w-1/2 lg:ml-20">
         <p className={`${merriweather.className} text-xl sm:text-2xl text-gray-400`}>Gestión escolar</p>
         <h2 className={`${merriweather.className} my-6 text-4xl sm:text-5xl lg:text-6xl text-zinc-200`}>
           Organízate en minutos {" "}
