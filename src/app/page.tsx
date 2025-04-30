@@ -1,11 +1,10 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { User } from "@supabase/supabase-js";
 
 import { useAuthSessionListener } from "@/hooks/useAuthSessionListener";
-import { supabase } from "@/supabase/supabaseClient";
 
 import Management from "@/components/Management/Management";
 import HeroSection from "@/components/HeroSection/HeroSection";
@@ -73,7 +72,11 @@ const Home: React.FC = () => {
           >
             ¿Listo para transformar tu organización?
           </h2>
-          <form className="space-y-4" onSubmit={handleSubmit} aria-label="Formulario de contacto">
+          <form
+            className="space-y-4"
+            onSubmit={handleSubmit}
+            aria-label="Formulario de contacto"
+          >
             <input
               type="text"
               name="nombre"
