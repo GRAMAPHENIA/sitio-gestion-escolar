@@ -2,7 +2,8 @@
 import { NextResponse } from 'next/server';
 import { supabase } from '@/supabase/supabaseClient';
 import { User } from '@/types/users/types';
-import { validateUser } from '@/validation/users/validations';
+import { validateUserInput } from '@/validation/users/validations';
+
 
 // POST: Registrar un usuario
 export async function POST(request: Request) {
@@ -10,7 +11,7 @@ export async function POST(request: Request) {
     const body: User = await request.json();
 
     // Validación de datos
-    if (!validateUser(body)) {
+    if (!validateUserInput(body as unknown as string, 'create')) {
       return NextResponse.json(
         { error: 'Los datos enviados no son válidos.' },
         { status: 400 }
