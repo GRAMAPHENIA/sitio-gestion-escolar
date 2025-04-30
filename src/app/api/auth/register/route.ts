@@ -10,7 +10,6 @@ export async function POST(req: Request) {
   try {
     const { email, password } = await req.json();
 
-    // Validaciones del backend
     if (!email || !password) {
       return NextResponse.json(
         { error: "Todos los campos son obligatorios" },
@@ -18,45 +17,46 @@ export async function POST(req: Request) {
       );
     }
 
-    // Verificar si el usuario ya existe
-    const { data: existingUser, error: userError } = await supabase
-      .from("users")
-      .select("id")
-      .eq("email", email)
-      .single();
-
-    if (userError && userError.code !== "PGRST116") {
+    if (!email.includes("@") || password.length < 6) {
       return NextResponse.json(
-        { error: "Error al verificar el usuario" },
-        { status: 500 }
-      );
-    }
-
-    if (existingUser) {
-      return NextResponse.json(
-        { error: "El correo electrónico ya está registrado" },
+        { error: "Email o contraseña inválidos" },
         { status: 400 }
       );
     }
 
-    // Registrar al usuario en Supabase
+    // Registrar en sistema de autenticación
     const { data: authData, error: authError } = await supabase.auth.signUp({
       email,
       password,
     });
 
     if (authError) {
+      if (authError.message.includes("user already registered")) {
+        return NextResponse.json(
+          { error: "El correo electrónico ya está registrado" },
+          { status: 400 }
+        );
+      }
+
       return NextResponse.json(
-        { error: "El correo ya está registrado" },
+        { error: "No se pudo registrar el usuario" },
         { status: 500 }
       );
     }
 
-    // Insertar el usuario en la tabla "users"
+    const userId = authData.user?.id;
+
+    if (!userId) {
+      return NextResponse.json(
+        { error: "No se pudo obtener el ID del usuario" },
+        { status: 500 }
+      );
+    }
+
+    // Guardar usuario en tabla "users"
     const { error: dbError } = await supabase.from("users").insert([
       {
-        id: authData.user?.id, // Asegúrate de usar el id del usuario autenticado
-        auth_id: authData.user?.id, // Usa el mismo id para auth_id
+        auth_id: userId,
         email,
       },
     ]);
@@ -70,7 +70,7 @@ export async function POST(req: Request) {
     }
 
     return NextResponse.json(
-      { message: "Usuario registrado exitosamente" },
+      { message: "Usuario registrado exitosamente", userId },
       { status: 201 }
     );
   } catch (error) {
