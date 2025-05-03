@@ -27,3 +27,9 @@ Web App
 `npm install tailwind-merge`
 
 `npm i @vercel/speed-insights`
+
+
+# TAREAS
+
+- [ ] Corregir nombre de ruta en seccion forgot-password, UI. No se testeo todavia.
+- [ ] 

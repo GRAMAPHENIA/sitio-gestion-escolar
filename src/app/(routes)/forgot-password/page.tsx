@@ -16,6 +16,7 @@ const formSchema = z.object({
 // Componente principal envuelto en Suspense
 export default function ForgotPasswordPage() {
   return (
+    // TODO: Reemplazar con un componente de carga dinámico.
     <Suspense fallback={<div>Cargando...</div>}>
       <ForgotPassword />
     </Suspense>
@@ -63,16 +64,15 @@ function ForgotPassword() {
       <section className="w-[380px]">
         <header>
           <title>Password Reset</title>
-          <p>Enter your email address to reset your password</p>
+          <p>Introduce tu correo electrónico para restablecer tu contraseña Correo electrónico</p>
         </header>
         <article>
-          <form onSubmit={form.handleSubmit(handleSubmit)} className="flex flex-col gap-2">
+          <form
+            onSubmit={form.handleSubmit(handleSubmit)}
+            className="flex flex-col gap-2"
+          >
             <label>Email</label>
-            <input
-              type="email"
-              className="input"
-              {...form.register("email")}
-            />
+            <input type="email" className="input" {...form.register("email")} />
             {serverError && (
               <p className="text-red-500 text-sm mt-2">{serverError}</p>
             )}

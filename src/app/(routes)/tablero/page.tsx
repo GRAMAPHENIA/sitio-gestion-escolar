@@ -26,12 +26,11 @@ import { Tooltip } from "react-tooltip";
 import Image from "next/image";
 
 const Dashboard = () => {
-  const [isAsideOpen, setIsAsideOpen] = useState(false); // Estado para abrir/cerrar el primer aside
-  const [isSecondAsideOpen, setIsSecondAsideOpen] = useState(true); // Estado para abrir/cerrar el segundo aside
-  const [selectedSection, setSelectedSection] = useState("institucion"); // Sección seleccionada
-  const [user, setUser] = useState<User | null>(null); // Información del usuario
-  const [loading, setLoading] = useState(true); // Estado de carga
-  // const [isMenuOpen, setIsMenuOpen] = useState(false); // Estado para el menú desplegable del avatar
+  const [isAsideOpen, setIsAsideOpen] = useState(false);
+  const [isSecondAsideOpen, setIsSecondAsideOpen] = useState(true);
+  const [selectedSection, setSelectedSection] = useState("institucion");
+  const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState(true);
   const router = useRouter();
 
   const menuItems = [
@@ -43,6 +42,15 @@ const Dashboard = () => {
     { name: "Notas", route: "notas", icon: <PiCertificate /> },
     { name: "Calendario", route: "calendario", icon: <PiCalendarDots /> },
   ];
+
+  useEffect(() => {
+    const handleResize = () => {
+      const isDesktop = window.innerWidth >= 1024;
+      setIsAsideOpen(isDesktop);
+    };
+
+    handleResize();
+  }, []);
 
   useEffect(() => {
     const checkUser = async () => {
@@ -81,13 +89,11 @@ const Dashboard = () => {
   return (
     <ProtectedRoute>
       <div className="flex h-screen flex-col">
-        {/* Barra superior con avatar */}
-        <div className="w-full  pl-20 pr-4 py-2 flex justify-end items-center">
+        <div className="w-full pl-20 pr-4 py-2 flex justify-end items-center">
           <AvatarMenu user={user} />
         </div>
 
         <div className="flex flex-1 overflow-hidden">
-          {/* Primer aside: Menú lateral */}
           <aside
             className={`bg-[#1d1e20] transition-all duration-100 ease-in-out z-30 absolute lg:relative flex flex-col justify-start overflow-hidden ${
               isAsideOpen ? "w-56" : "w-[53px]"
@@ -103,7 +109,6 @@ const Dashboard = () => {
               transition: "width 0.125s ease-in-out",
             }}
           >
-            {/* Logo */}
             <div className="flex items-center justify-start m-[6px]">
               <Image
                 src={"/logo/view-kanbab.svg"}
@@ -114,7 +119,6 @@ const Dashboard = () => {
               />
             </div>
 
-            {/* Menú */}
             <div>
               <div
                 onClick={() => router.push("/")}
@@ -134,7 +138,6 @@ const Dashboard = () => {
               <div className="border-b-2 border-dashed border-zinc-700 mt-2 mx-2"></div>
             </div>
 
-            {/* Opciones del menú */}
             <div className="flex flex-col space-y-4 p-2">
               {menuItems.map((item) => (
                 <div
@@ -149,9 +152,7 @@ const Dashboard = () => {
                   <span className="text-xl flex-shrink-0">{item.icon}</span>
                   <span
                     className={`text-sm font-medium whitespace-nowrap transition-all duration-200 ease-in-out absolute ${
-                      isAsideOpen
-                        ? "opacity-100 ml-8 relative"
-                        : "opacity-0 w-0"
+                      isAsideOpen ? "opacity-100 ml-8 relative" : "opacity-0 w-0"
                     }`}
                   >
                     {item.name}
@@ -162,7 +163,6 @@ const Dashboard = () => {
             <div className="border-b-2 border-dashed border-zinc-700 mx-2"></div>
           </aside>
 
-          {/* Segundo aside: Panel lateral derecho */}
           <aside
             className={`transition-all duration-200 bg-[#1d1e20] ml-10 ${
               isSecondAsideOpen ? "w-1/5" : "w-0"
@@ -182,7 +182,6 @@ const Dashboard = () => {
                   )}
                 </button>
 
-                {/* Tooltip de configuración */}
                 <Tooltip
                   id="panel-tooltip"
                   border="1px solid #434343"
@@ -200,7 +199,6 @@ const Dashboard = () => {
             )}
           </aside>
 
-          {/* Contenido principal */}
           <main className="flex-1 bg-[#1d1e20] px-20 pt-4 overflow-y-auto max-h-screen">
             <MainContent selectedSection={selectedSection} />
           </main>
