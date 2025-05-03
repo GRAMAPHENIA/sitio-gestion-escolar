@@ -4,16 +4,20 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { User } from "@supabase/supabase-js";
 
+// Hooks
 import { useAuthSessionListener } from "@/hooks/useAuthSessionListener";
 
-import Management from "@/components/Management/Management";
-import HeroSection from "@/components/HeroSection/HeroSection";
-import FeaturesGrid from "@/components/Features/FeaturesGrid";
+// Componentes principales
 import Header from "@/components/Header/Header";
+import HeroSection from "@/components/HeroSection/HeroSection";
+import Management from "@/components/Management/Management";
+import FeaturesGrid from "@/components/Features/FeaturesGrid";
 
+// Iconos y Tipografías
 import { BiSend } from "react-icons/bi";
 import { Merriweather, Fira_Code } from "next/font/google";
 
+// Tipografías personalizadas
 const merriweather = Merriweather({
   weight: ["300", "400", "700", "900"],
   subsets: ["latin"],
@@ -32,27 +36,32 @@ const Home: React.FC = () => {
   const [user, setUser] = useState<User | null>(null);
   const router = useRouter();
 
+  // Escucha el estado de sesión y actualiza el usuario
   useAuthSessionListener(setUser);
 
-  const handleDashboardRedirect = () => router.push("/tablero");
+  // Redirige al usuario autenticado al dashboard
+  const redirectToDashboard = () => router.push("/tablero");
 
-  const handleScrollToForm = () => {
+  // Hace scroll suave hasta el formulario de contacto
+  const scrollToContactForm = () => {
     const formSection = document.getElementById("contact-form");
     formSection?.scrollIntoView({ behavior: "smooth" });
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  // Envío del formulario de contacto (placeholder)
+  const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // lógica de envío de formulario aquí
+    // Aquí podrías conectar con un endpoint o servicio
   };
 
   return (
-    <div className="relative">
+    <main className="relative">
       <Header />
+
       <HeroSection
         user={!!user}
-        handleDashboardRedirect={handleDashboardRedirect}
-        handleScrollToForm={handleScrollToForm}
+        handleDashboardRedirect={redirectToDashboard}
+        handleScrollToForm={scrollToContactForm}
       />
 
       <section className="max-w-7xl mx-auto space-y-4">
@@ -61,9 +70,9 @@ const Home: React.FC = () => {
       </section>
 
       <section
-        className="max-w-7xl mx-auto mb-20 lg:px-20"
         id="contact-form"
         aria-labelledby="contact-form-title"
+        className="max-w-7xl mx-auto mb-20 lg:px-20"
       >
         <div className="bg-[#292a2d] rounded-lg border border-zinc-700 p-8">
           <h2
@@ -72,32 +81,39 @@ const Home: React.FC = () => {
           >
             ¿Listo para transformar tu organización?
           </h2>
+
           <form
-            className="space-y-4"
-            onSubmit={handleSubmit}
+            onSubmit={handleFormSubmit}
             aria-label="Formulario de contacto"
+            className="space-y-4"
           >
             <input
               type="text"
               name="nombre"
+              required
               aria-label="Tu nombre"
               placeholder="Tu Nombre"
               className={`${firacode.className} w-full px-4 py-3 bg-white/5 text-zinc-200 placeholder:text-zinc-600 border border-gray-600 rounded-lg focus:ring-orange-500 focus:border-orange-500 transition focus:outline-none focus:ring-0`}
             />
+
             <input
               type="email"
               name="email"
+              required
               aria-label="Tu correo electrónico"
               placeholder="Tu Email"
               className={`${firacode.className} w-full px-4 py-3 bg-white/5 text-zinc-200 placeholder:text-zinc-600 border border-gray-600 rounded-lg focus:ring-orange-500 focus:border-orange-500 transition focus:outline-none focus:ring-0`}
             />
+
             <textarea
               name="mensaje"
+              required
               aria-label="Tu mensaje"
               placeholder="Tu Mensaje"
               rows={4}
               className={`${firacode.className} w-full px-4 py-3 bg-white/5 text-zinc-200 placeholder:text-zinc-600 border border-gray-600 rounded-lg focus:ring-orange-500 focus:border-orange-500 transition focus:outline-none focus:ring-0`}
             />
+
             <button
               type="submit"
               className={`${merriweather.className} w-full px-6 py-3 bg-orange-600/20 hover:bg-orange-500/20 text-orange-400 hover:text-orange-300 transition duration-100 rounded-md flex items-center justify-center gap-2`}
@@ -108,7 +124,7 @@ const Home: React.FC = () => {
           </form>
         </div>
       </section>
-    </div>
+    </main>
   );
 };
 
